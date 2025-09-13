@@ -1,0 +1,89 @@
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Load food nutrition data from JSON file
+const foodDBPath = path.join(__dirname, "data", "foodDB.json");
+let foodDB = {};
+
+// Load foodDB synchronously on startup
+try {
+  const data = fs.readFileSync(foodDBPath, "utf8");
+  foodDB = JSON.parse(data);
+} catch (err) {
+  console.error("Error loading food database:", err);
+  process.exit(1);
+}
+
+// Helper function to parse meal string and sum nutrition
+function analyzeMeal(mealText) {
+  let calories = 0,
+    protein = 0,
+    carbs = 0,
+    fat = 0;
+
+  // Convert input to lowercase for matching
+  const lowerMeal = mealText.toLowerCase();
+
+  // Check for each food item in the meal text
+  for (const [food, nutrients] of Object.entries(foodDB)) {
+    if (lowerMeal.includes(food)) {
+      calories += nutrients.calories;
+      protein += nutrients.protein;
+      carbs += nutrients.carbs;
+      fat += nutrients.fat;
+    }
+  }
+
+  // Basic nutritional suggestions rule-based
+  const suggestions = [];
+  if (protein < 20) suggestions.push("Add more protein-rich foods for muscle health");
+  if (calories > 700)
+    suggestions.push("Meal is high in calories; consider smaller portions");
+  if (carbs > 50)
+    suggestions.push("Watch carbohydrate intake if you are managing weight");
+  if (fat > 30) suggestions.push("Reduce fat intake to maintain heart health");
+  if (suggestions.length === 0) suggestions.push("Your meal looks balanced");
+
+  return {
+    calories: calories.toFixed(1),
+    protein: protein.toFixed(1),
+    carbs: carbs.toFixed(1),
+    fat: fat.toFixed(1),
+    suggestions: suggestions.join(". "),
+  };
+}
+
+// API endpoint to analyze meal
+app.post("/api/analyze", (req, res) => {
+  const { meal } = req.body;
+  if (!meal || typeof meal !== "string") {
+    return res
+      .status(400)
+      .json({ error: "Please provide a valid 'meal' string in the request body." });
+  }
+
+  try {
+    const analysis = analyzeMeal(meal);
+    res.json(analysis);
+  } catch (err) {
+    console.error("Analysis error:", err);
+    res.status(500).json({ error: "Server error analyzing meal." });
+  }
+});
+
+// Health check route
+app.get("/", (req, res) => {
+  res.send("Nutrition Advisor API is running.");
+});
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
