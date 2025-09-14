@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Nutrition Advisor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1 class="logo">🍽️ <span class="gradient-text">AI Nutrition Advisor</span></h1>
+    <nav class="menu">
+      <a href="#meal-input">Meals</a>
+      <a href="#results">Results</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="overlay"></div>
+    <div class="hero-content">
+      <h2><span class="gradient-text">Track</span> Your <b>Meals</b>, <br>Get <span class="highlight">Smart Insights</span></h2>
+      <p><b>Personalized nutrition analysis</b> for <span class="colored">South Indian meals</span>.</p>
+      <a href="#meal-input" class="cta-btn">✨ Start Now</a>
+    </div>
+  </section>
+
+  <!-- Meal Input -->
+  <section id="meal-input" class="section">
+    <h3 class="section-title">🍛 <span class="gradient-text">Enter Your Meals</span></h3>
+    <textarea id="mealInput" placeholder="e.g., idli, dosa, sambar, curd rice..."
+      class="input-box"></textarea>
+    <button onclick="analyzeMeal()" class="action-btn">Analyze Meals</button>
+  </section>
+
+  <!-- Results -->
+  <section id="results" class="section">
+    <h3 class="section-title">📊 <b>Your Nutrition Analysis</b></h3>
+    
+    <!-- Summary + Suggestions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div id="summary" class="card text-xl font-bold text-gray-800"></div>
+      <div id="suggestions" class="card text-xl font-bold text-green-700"></div>
+    </div>
+
+    <!-- Food Breakdown -->
+    <h3 class="section-title mt-10">🍴 <span class="highlight">Food-wise Nutrition</span></h3>
+    <div id="foodDetails" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+      <div id="macroChart" class="card h-[400px]"></div>
+      <div id="microChart" class="card h-[400px]"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section bg-white shadow-inner">
+    <h3 class="section-title">ℹ️ <span class="highlight">About This Project</span></h3>
+    <p class="max-w-2xl text-gray-600 mx-auto text-center">
+      The <b>AI Nutrition Advisor</b> helps you analyze traditional <span class="colored">South Indian meals</span>, 
+      flag deficiencies, and suggest <span class="gradient-text">healthier alternatives</span> — 
+      powered by <b>AI intelligence</b> and <span class="highlight">real food datasets</span>.
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 <b>AI Nutrition Advisor</b> | Built with ❤️ by <span class="gradient-text">Rohit SK</span></p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
